@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>{{ page_title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* HealthPulse Inspired Color Palette */
+            --clr-primary: #4A90E2; /* Calming, professional blue */
+            --clr-primary-light: #EAF2FA;
+            --clr-accent: #50E3C2;   /* Fresh teal/mint accent */
+            --clr-accent-dark: #38A89D;
+            --clr-bg: #F9FAFB;       /* Very light grey background */
+            --clr-text-primary: #1F2937; /* Dark grey primary text */
+            --clr-text-secondary: #4B5563; /* Medium grey secondary text */
+            --clr-white: #FFFFFF;
+            --clr-border: #D1D5DB;   /* Softer border color */
+            --clr-card-bg: var(--clr-white);
+            --clr-danger: #EF4444;
+
+            --radius-sm: 6px;
+            --radius-md: 12px;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            height: 100%;
+            font-family: var(--font-primary);
+            background: var(--clr-bg);
+            color: var(--clr-text-primary);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background: linear-gradient(135deg, var(--clr-primary), var(--clr-accent));
+            color: var(--clr-white);
+            padding: 2.5rem 2rem;
+            text-align: center;
+            border-bottom-left-radius: var(--radius-md);
+            border-bottom-right-radius: var(--radius-md);
+            box-shadow: var(--shadow-md);
+        }
+
+        header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        header p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* MAIN */
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 2.5rem 1.5rem;
+        }
+
+        .chat-container {
+            background: var(--clr-card-bg);
+            padding: 2rem;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-md);
+            max-width: 700px;
+            width: 95%;
+            border: 1px solid var(--clr-border);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-container h2 {
+            font-size: 1.8rem;
+            color: var(--clr-primary);
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--clr-primary-light);
+            display: inline-block;
+        }
+
+        .back-link {
+            display: inline-block;
+            text-decoration: none;
+            color: var(--clr-text-secondary);
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+            transition: color 0.2s ease-out;
+        }
+
+        .back-link:hover {
+            color: var(--clr-primary);
+            text-decoration: underline;
+        }
+
+        #chat-box {
+            border: 1px solid var(--clr-border);
+            border-radius: var(--radius-sm);
+            height: 350px; /* Slightly taller */
+            overflow-y: auto;
+            padding: 1rem;
+            background: var(--clr-white);
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            flex-grow: 1; /* Allows it to take up available space */
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .message {
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-sm);
+            line-height: 1.4;
+            word-break: break-word;
+        }
+
+        .message-you {
+            background-color: var(--clr-primary-light);
+            color: var(--clr-text-primary);
+            align-self: flex-end;
+            border-bottom-right-radius: 0;
+        }
+
+        .message-them {
+            background-color: var(--clr-accent-light); /* Define this if needed, or use a direct color */
+            color: var(--clr-white);
+            background-color: var(--clr-accent);
+            align-self: flex-start;
+            border-bottom-left-radius: 0;
+        }
+
+        .message-meta {
+            font-size: 0.8rem;
+            color: var(--clr-text-secondary);
+            margin-top: 0.2rem;
+        }
+
+        .input-area {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        #message-input {
+            flex-grow: 1;
+            padding: 0.8rem;
+            border: 1px solid var(--clr-border);
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-size: 1rem;
+        }
+
+        button {
+            padding: 0.8rem 1.5rem;
+            background: var(--clr-primary);
+            color: var(--clr-white);
+            border: none;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease-out, transform 0.2s ease-out;
+        }
+
+        button:hover {
+            background: var(--clr-primary-light);
+            color: var(--clr-primary);
+            transform: translateY(-1px);
+        }
+
+        /* FOOTER */
+        footer {
+            background: var(--clr-text-primary);
+            color: #A0AEC0;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            border-top-left-radius: var(--radius-md);
+            border-top-right-radius: var(--radius-md);
+            margin-top: 3rem;
+        }
+
+        footer h3 {
+            color: var(--clr-white);
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+        }
+
+        footer p, footer a {
+            font-size: 0.95rem;
+            color: #CBD5E0;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: var(--clr-white);
+            text-decoration: underline;
+        }
+
+        .footer-links {
+            margin: 1.2rem 0;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-bottom {
+            margin-top: 1.2rem;
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+        /* Responsive Adjustments (simplified for brevity) */
+        @media (max-width: 768px) {
+            main {
+                padding: 2rem 1rem;
+            }
+            .chat-container {
+                width: 98%;
+                padding: 1.5rem;
+            }
+            .chat-container h2 {
+                font-size: 1.6rem;
+                margin-bottom: 1rem;
+            }
+            .input-area {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            #message-input, button {
+                width: 100%;
+            }
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.3/socket.io.min.js"></script>
+</head>
+<body>
+
+    <header>
+        <h1>Chat Session</h1>
+        <p>{{ doctor.username }} &amp; {{ patient.username }}</p>
+    </header>
+
+    <main>
+        <div class="chat-container">
+            <h2>Messages</h2>
+            <a href="{{ url_for('dashboard') }}" class="back-link">← Back to Dashboard</a>
+            <div id="chat-box">
+                {% for msg in message_history %}
+                <div class="message {{ 'message-you' if msg.sender_id == current_user.id else 'message-them' }}">
+                    
+                    
+                    {{ msg.message }}
+                </div>
+                {% endfor %}
+            </div>
+            <div class="input-area">
+                <input type="text" id="message-input" placeholder="Type message..." />
+                <button onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <h3>About RetinoScan AI</h3>
+        <p>Secure, AI-powered communication between patients and doctors, enhancing retinal care.</p>
+
+        <div class="footer-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Contact Support</a>
+        </div>
+
+        <div class="footer-bottom">
+            &copy; 2025 RetinoScan AI. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        var socket = io({ transports: ['websocket'] });
+        var doctor_id = {{ doctor.id | tojson }};
+        var patient_id = {{ patient.id | tojson }};
+        var current_user_id = {{ current_user.id | tojson }};
+        var room = 'chat_' + (doctor_id < patient_id ? doctor_id + '_' + patient_id : patient_id + '_' + doctor_id);
+        socket.emit('join', { doctor_id: doctor_id, patient_id: patient_id });
+
+        function sendMessage() {
+            var msgInput = document.getElementById('message-input');
+            var message = msgInput.value.trim();
+            if (message.length === 0) return;
+
+            var chatBox = document.getElementById('chat-box');
+            var messageDiv = document.createElement('div');
+            messageDiv.textContent = message;
+            var metaSpan = document.createElement('span');
+            metaSpan.textContent = new Date().toLocaleTimeString([], { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+            metaSpan.className = 'message-meta';
+
+            var containerDiv = document.createElement('div');
+            containerDiv.className = 'message message-you';
+            var strong = document.createElement('strong');
+            strong.textContent = 'You';
+            
+            containerDiv.appendChild(document.createTextNode(message));
+
+            chatBox.appendChild(containerDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            socket.emit('send_message', {
+                doctor_id: doctor_id,
+                patient_id: patient_id,
+                sender_id: current_user_id,
+                recipient_id: (current_user_id === doctor_id ? patient_id : doctor_id),
+                message: message
+            });
+
+            msgInput.value = '';
+        }
+
+        socket.on('receive_message', function(data) {
+            var chatBox = document.getElementById('chat-box');
+            var messageDiv = document.createElement('div');
+            messageDiv.textContent = data.message;
+            var metaSpan = document.createElement('span');
+            const receivedDate = new Date(data.timestamp);
+            metaSpan.textContent = receivedDate.toLocaleTimeString([], { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+            metaSpan.className = 'message-meta';
+
+            var containerDiv = document.createElement('div');
+            containerDiv.className = 'message message-them';
+            var strong = document.createElement('strong');
+            strong.textContent = 'Them';
+
+            containerDiv.appendChild(document.createTextNode(data.message));
+
+            chatBox.appendChild(containerDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        });
+    </script>
+</body>
+</html>

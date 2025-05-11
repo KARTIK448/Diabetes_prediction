@@ -1,0 +1,2 @@
+diabetic_retinopathy_model.h5 filter=lfs diff=lfs merge=lfs -text
+pattern/to/match/files !text !filter !merge !diff

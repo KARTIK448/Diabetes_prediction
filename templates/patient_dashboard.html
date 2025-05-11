@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>RetinoScan AI - Patient Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Modernized & Cohesive Color Palette */
+            --clr-primary: #4A90E2; /* A calming, professional blue */
+            --clr-primary-light: #EAF2FA;
+            --clr-accent: #50E3C2;  /* A fresh, modern teal/mint accent */
+            --clr-accent-dark: #38A89D;
+            --clr-bg: #F9FAFB;      /* Very light grey for overall background */
+            --clr-text-primary: #1F2937; /* Dark grey for primary text */
+            --clr-text-secondary: #4B5563; /* Medium grey for secondary text */
+            --clr-white: #FFFFFF;
+            --clr-border: #D1D5DB;   /* Softer border color */
+            --clr-card-bg: var(--clr-white);
+            --clr-danger: #EF4444; /* For destructive actions or warnings if needed */
+
+            --radius-sm: 6px;
+            --radius-md: 12px;
+            --radius-lg: 24px;
+
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
+
+            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            background: var(--clr-bg);
+            color: var(--clr-text-primary);
+            line-height: 1.65; /* Improved readability */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        header {
+            background: linear-gradient(135deg, var(--clr-primary), var(--clr-accent));
+            color: var(--clr-white);
+            padding: 2.5rem 2rem;
+            text-align: center;
+            border-bottom-left-radius: var(--radius-md);
+            border-bottom-right-radius: var(--radius-md);
+            box-shadow: var(--shadow-md);
+        }
+
+        header h1 {
+            font-size: 2.5rem; /* Slightly larger */
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px; /* Constrain width for better readability */
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        nav {
+            margin-top: 2rem; /* More space */
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .nav-button {
+            background: var(--clr-white);
+            color: var(--clr-primary);
+            padding: 0.75rem 1.75rem;
+            font-weight: 600;
+            border-radius: var(--radius-lg);
+            text-decoration: none;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.25s ease-out;
+            border: 2px solid transparent;
+        }
+
+        .nav-button:hover {
+            background: var(--clr-primary-light);
+            color: var(--clr-primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* MAIN CONTENT */
+        main {
+            flex: 1; /* Ensures main content takes available space */
+            padding: 2.5rem 1.5rem; /* More padding */
+            max-width: 1100px; /* Wider content area */
+            width: 95%;
+            margin: 0 auto; /* Center main content */
+        }
+
+        .section {
+            background: var(--clr-card-bg);
+            border-radius: var(--radius-md);
+            padding: 2rem 2.5rem; /* More padding */
+            box-shadow: var(--shadow-md);
+            margin-bottom: 3rem; /* More space between sections */
+            border: 1px solid var(--clr-border);
+        }
+
+        .section h2 {
+            font-size: 1.8rem; /* Larger section titles */
+            margin-bottom: 1.5rem; /* More space below title */
+            color: var(--clr-primary);
+            font-weight: 600;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--clr-primary-light);
+            display: inline-block;
+        }
+
+        .section > p { /* For "No uploads/doctors" messages */
+            color: var(--clr-text-secondary);
+            font-size: 1rem;
+            padding: 1rem 0;
+        }
+
+        .card-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Slightly larger min card width */
+            gap: 1.5rem; /* Increased gap */
+        }
+
+        .card {
+            background: var(--clr-white);
+            border-radius: var(--radius-md); /* Consistent radius */
+            padding: 1.5rem; /* More padding in card */
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.25s ease-out, box-shadow 0.25s ease-out;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--clr-border);
+        }
+
+        .card:hover {
+            transform: translateY(-6px); /* More pronounced lift */
+            box-shadow: var(--shadow-lg); /* Larger shadow on hover */
+        }
+
+        .card a { /* For filename link */
+            text-decoration: none;
+            color: var(--clr-primary);
+            font-weight: 600;
+            font-size: 1.1rem; /* Slightly larger filename */
+            margin-bottom: 0.75rem; /* More space below filename */
+            display: block; /* Make it block to take full width for easier clicking */
+        }
+         .card a:hover {
+            text-decoration: underline;
+        }
+
+        .card .result, .card div strong { /* Styling for result text and doctor name */
+            font-size: 1rem;
+            color: var(--clr-text-secondary);
+            margin-bottom: 1rem; /* Space before chat button or if it's the last element */
+        }
+        .card div strong { /* Doctor name */
+            color: var(--clr-text-primary);
+            font-weight: 600;
+            font-size: 1.15rem;
+        }
+
+
+        .chat-button {
+            background: var(--clr-accent);
+            color: var(--clr-white); /* Ensure good contrast */
+            padding: 0.7rem 1.2rem; /* Slightly larger padding */
+            border-radius: var(--radius-sm);
+            text-decoration: none;
+            font-weight: 600; /* Bolder */
+            align-self: flex-start; /* Keep it to the start if card content is sparse */
+            transition: background-color 0.2s ease, transform 0.2s ease;
+            margin-top: auto; /* Pushes button to bottom if card content allows */
+            border: none;
+        }
+
+        .chat-button:hover {
+            background: var(--clr-accent-dark); /* Darker accent on hover */
+            transform: scale(1.03); /* Subtle scale */
+        }
+
+        /* FOOTER */
+        footer {
+            background: var(--clr-text-primary); /* Darker footer for good contrast */
+            color: #A0AEC0; /* Lighter text color */
+            padding: 3rem 2rem;
+            text-align: center;
+            border-top-left-radius: var(--radius-md);
+            border-top-right-radius: var(--radius-md);
+            margin-top: auto; /* Pushes footer to bottom */
+        }
+
+        footer h3 {
+            color: var(--clr-white);
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        footer p, footer a {
+            font-size: 0.95rem;
+            color: #CBD5E0;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: var(--clr-white);
+            text-decoration: underline;
+        }
+
+        footer .footer-links {
+            margin: 1.5rem 0;
+            display: flex;
+            justify-content: center;
+            gap: 2.5rem;
+            flex-wrap: wrap;
+        }
+
+        footer .footer-bottom {
+            margin-top: 1.5rem;
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+        /* RESPONSIVE ADJUSTMENTS */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            header p {
+                font-size: 1rem;
+            }
+            main {
+                padding: 2rem 1rem;
+            }
+            .section {
+                padding: 1.5rem;
+            }
+            .section h2 {
+                font-size: 1.6rem;
+            }
+            .card-list {
+                grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+                gap: 1rem;
+            }
+            .card {
+                padding: 1.25rem;
+            }
+        }
+
+        @media (max-width: 500px) {
+            header {
+                padding: 2rem 1.5rem;
+            }
+            header h1 {
+                font-size: 1.8rem;
+            }
+            nav {
+                flex-direction: column; /* Stack nav buttons */
+                gap: 0.8rem;
+            }
+            .nav-button {
+                width: 100%; /* Make nav buttons full width */
+                padding: 0.8rem 1.5rem;
+            }
+            .section h2 {
+                font-size: 1.4rem;
+            }
+            .card-list {
+                grid-template-columns: 1fr; /* Single column for cards */
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>RetinoScan AI</h1> <p>Smart Retina Analysis & Doctor Connect — Empowering Early Diabetes Detection</p>
+        <nav>
+            <a class="nav-button" href="{{ url_for('upload') }}">Upload Retina Image</a>
+            <a class="nav-button" href="{{ url_for('logout') }}">Logout</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="section">
+            <h2>🧠 Analysis History</h2>
+            <div class="card-list">
+                {% for upload in uploads %}
+                    <div class="card">
+                        <a href="{{ url_for('view_image', image_id=upload.id) }}">{{ upload.filename }}</a>
+                        <div class="result">Result: {{ upload.result }}</div>
+                    </div>
+                {% else %}
+                    <p>No uploads yet. Start by uploading your first image.</p>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>👨‍⚕️ Chat with Doctors</h2>
+            <div class="card-list">
+                {% if doctors %}
+                    {% for doctor in doctors %}
+                        <div class="card">
+                            <div><strong>{{ doctor.username }}</strong></div>
+                            <a class="chat-button" href="{{ url_for('chat', patient_id=current_user.id, doctor_id=doctor.id) }}">Start Chat</a>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No doctors available at the moment. Please check back later.</p>
+                {% endif %}
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <h3>About RetinoScan AI</h3>
+        <p>We provide early detection of diabetic retinopathy using AI-powered image analysis and real-time doctor consultation.</p>
+
+        <div class="footer-links">
+            <a href="{{ url_for('upload') }}">Upload</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Contact Support</a>
+        </div>
+
+        <div class="footer-bottom">
+            &copy; 2025 RetinoScan AI. All rights reserved.
+        </div>
+    </footer>
+</body>
+</html>

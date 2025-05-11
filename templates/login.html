@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login - RetinoScan AI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    :root {
+      --clr-primary: #6c63ff;
+      --clr-accent: #ff6584;
+      --clr-bg: #fdfbff;
+      --clr-dark: #1a1a2e;
+      --radius: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--clr-bg);
+      color: var(--clr-dark);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* HEADER */
+    header {
+      background: linear-gradient(135deg, var(--clr-primary), var(--clr-accent));
+      color: white;
+      padding: 2rem;
+      text-align: center;
+      border-bottom-left-radius: var(--radius);
+      border-bottom-right-radius: var(--radius);
+    }
+
+    header h1 {
+      font-size: 2rem;
+      margin-bottom: 0.3rem;
+    }
+
+    /* MAIN LOGIN CARD */
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      background: white;
+      padding: 2rem;
+      border-radius: var(--radius);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.1);
+      max-width: 400px;
+      width: 100%;
+    }
+
+    h2 {
+      text-align: center;
+      color: var(--clr-primary);
+      margin-bottom: 1rem;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      margin-top: 1rem;
+      font-weight: 600;
+    }
+
+    input {
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px;
+      background: var(--clr-primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background: var(--clr-dark);
+    }
+
+    .messages {
+      margin-top: 1rem;
+    }
+
+    .msg-danger {
+      color: red;
+    }
+
+    .msg-success {
+      color: green;
+    }
+
+    a {
+      display: block;
+      text-align: center;
+      margin-top: 1rem;
+      text-decoration: none;
+      color: var(--clr-primary);
+      font-weight: 500;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--clr-dark);
+      color: #eee;
+      padding: 2rem;
+      text-align: center;
+      border-top-left-radius: var(--radius);
+      border-top-right-radius: var(--radius);
+    }
+
+    footer h3 {
+      color: var(--clr-accent);
+      font-size: 1.3rem;
+      margin-bottom: 0.8rem;
+    }
+
+    footer p, footer a {
+      font-size: 0.95rem;
+      color: #ccc;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    .footer-links {
+      margin: 1rem 0;
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-bottom {
+      margin-top: 1rem;
+      font-size: 0.8rem;
+      opacity: 0.7;
+    }
+
+    @media (max-width: 500px) {
+      header h1 {
+        font-size: 1.6rem;
+      }
+
+      .container {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header>
+    <h1>RetinoScan AI Login</h1>
+    <p>Secure access for doctors and patients</p>
+  </header>
+
+  <!-- MAIN LOGIN FORM -->
+  <main>
+    <div class="container">
+      <h2>Login</h2>
+      <form method="POST" action="">
+        {{ form.csrf_token }}
+        <label for="username">{{ form.username.label.text }}</label>
+        {{ form.username(id="username") }}
+
+        <label for="password">{{ form.password.label.text }}</label>
+        {{ form.password(id="password") }}
+
+        {{ form.submit() }}
+      </form>
+      <a href="{{ url_for('register') }}">No account? Register here</a>
+
+      <div class="messages">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <ul>
+              {% for category, message in messages %}
+                <li class="{% if category=='danger' %}msg-danger{% else %}msg-success{% endif %}">{{ message }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <h3>About RetinoScan AI</h3>
+    <p>We help detect diabetic retinopathy early with AI-powered retina analysis and instant doctor connectivity.</p>
+
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Support</a>
+    </div>
+
+    <div class="footer-bottom">
+      &copy; 2025 RetinoScan AI. All rights reserved.
+    </div>
+  </footer>
+</body>
+</html>

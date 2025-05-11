@@ -1,0 +1,30 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Dataset files and model files
+Dataset2/*.csv
+Dataset2/*.npz
+Dataset2/*.h5
+Dataset2/
+
+# Database files
+*.db
+instance/
+
+# Uploads folder (user uploaded files)
+uploads/
+
+
+# VSCode settings folder
+.vscode/
+
+# Ignore processed_data.npz in root directory
+processed_data.npz
+
+
+.env

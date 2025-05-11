@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Upload Retinal Image</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --clr-primary: #6c63ff;
+      --clr-accent: #ff6584;
+      --clr-bg: #fdfbff;
+      --clr-dark: #1a1a2e;
+      --radius: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--clr-bg);
+      color: var(--clr-dark);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--clr-primary), var(--clr-accent));
+      color: white;
+      padding: 2rem;
+      text-align: center;
+      border-bottom-left-radius: var(--radius);
+      border-bottom-right-radius: var(--radius);
+    }
+
+    header h1 {
+      font-size: 2rem;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
+
+    .container {
+      background: white;
+      padding: 2.5rem;
+      border-radius: var(--radius);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+      width: 100%;
+      max-width: 500px;
+    }
+
+    h2 {
+      text-align: center;
+      color: var(--clr-primary);
+      margin-bottom: 1.5rem;
+      font-size: 1.8rem;
+    }
+
+    .back-link {
+      display: block;
+      margin-bottom: 1.5rem;
+      color: var(--clr-primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    label {
+      font-weight: 600;
+    }
+
+    input[type="file"] {
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: #f8f9fa;
+    }
+
+    button {
+      padding: 1rem;
+      background-color: var(--clr-primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      margin-top: 0.5rem;
+    }
+
+    button:hover {
+      background-color: var(--clr-dark);
+    }
+
+    .messages {
+      margin-top: 1.5rem;
+      padding: 1rem 0;
+    }
+
+    .messages ul {
+      list-style: none;
+    }
+
+    .messages li {
+      padding: 0.75rem;
+      border-radius: 6px;
+      margin-bottom: 0.5rem;
+    }
+
+    .msg-danger {
+      color: #721c24;
+      background-color: #f8d7da;
+      padding: 0.75rem;
+      border-radius: 6px;
+    }
+
+    .msg-success {
+      color: #155724;
+      background-color: #d4edda;
+      padding: 0.75rem;
+      border-radius: 6px;
+    }
+
+    footer {
+      background: var(--clr-dark);
+      color: #eee;
+      padding: 2rem;
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    footer h3 {
+      color: var(--clr-accent);
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+    }
+
+    footer p, footer a {
+      font-size: 0.95rem;
+      color: #ccc;
+      text-decoration: none;
+      line-height: 1.6;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    .footer-links {
+      margin: 1.5rem 0;
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-bottom {
+      margin-top: 1.5rem;
+      font-size: 0.8rem;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <h1>Upload Retinal Image</h1>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main>
+    <div class="container">
+      <h2>Submit Your Image</h2>
+      <a href="{{ url_for('dashboard') }}" class="back-link">← Back to Dashboard</a>
+      <form method="POST" enctype="multipart/form-data">
+        {{ form.csrf_token }}
+        <div class="form-group">
+          <label for="image">{{ form.image.label.text }}</label>
+          {{ form.image(id="image") }}
+        </div>
+        {{ form.submit() }}
+      </form>
+      <div class="messages">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+          <ul>
+            {% for category, message in messages %}
+              <li class="{% if category=='danger' %}msg-danger{% else %}msg-success{% endif %}">{{ message }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+        {% endwith %}
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <h3>About RetinoScan AI</h3>
+    <p>AI-powered detection of diabetic retinopathy — secure, fast, and accessible.</p>
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Support</a>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2025 RetinoScan AI. All rights reserved.
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -10,3 +10,5 @@ numpy==1.24.2
 Pillow==9.4.0
 Flask-Cors==3.0.10
 psycopg2-binary==2.9.6
+gunicorn
+eventlet

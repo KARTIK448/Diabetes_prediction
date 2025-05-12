@@ -310,6 +310,7 @@
                     <div class="card">
                         <a href="{{ url_for('view_image', image_id=upload.id) }}">{{ upload.filename }}</a>
                         <div class="result">Result: {{ upload.result }}</div>
+                        <div class="result">Model Used: {{ model_label_map.get(upload.model_used, upload.model_used) }}</div>
                     </div>
                 {% else %}
                     <p>No uploads yet. Start by uploading your first image.</p>

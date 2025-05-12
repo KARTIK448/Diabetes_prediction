@@ -630,37 +630,23 @@
                             <thead>
 
                                 <tr>
-
                                     <th>Image Filename</th>
-
                                     <th>Analysis Result</th>
-
+                                    <th>Model Used</th>
                                     <th>View</th>
-
                                     <th>Chat</th>
-
                                 </tr>
-
                             </thead>
-
                             <tbody>
-
                                 {% for upload in uploads %}
-
                                     <tr>
-
                                         <td>{{ upload.filename }}</td>
-
                                         <td>{{ upload.result }}</td>
-
+                                        <td>{{ model_label_map.get(upload.model_used, upload.model_used) }}</td>
                                         <td><a class="view-link" href="{{ url_for('view_image', image_id=upload.id) }}" target="_blank">View</a></td>
-
                                         <td><a class="chat-link" href="{{ url_for('chat', patient_id=patient.id, doctor_id=current_user.id) }}">Chat</a></td>
-
                                     </tr>
-
                                 {% endfor %}
-
                             </tbody>
 
                         </table>

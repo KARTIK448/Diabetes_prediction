@@ -18,8 +18,8 @@ from PIL import Image
 import imghdr
 from flask_cors import CORS
 
-model_path = 'Dataset2/vit_model.h5'  # update with actual model path
-model = tf.keras.models.load_model(model_path)
+model_path = 'models'  # updated to models folder
+
 class_names = ['No_DR', 'Mild', 'Moderate', 'Severe', 'Proliferate_DR']
 
 secret_key = secrets.token_hex(16)  # Generates a random 32-character hex string
@@ -219,8 +219,8 @@ def upload():
         img_array = np.expand_dims(img_array, axis=0)  # batch dimension
 
         # Dynamically load the selected model
-        model_path = os.path.join('Dataset2', selected_model_file)
-        selected_model = tf.keras.models.load_model(model_path)
+        model_file_path = os.path.join(model_path, selected_model_file)
+        selected_model = tf.keras.models.load_model(model_file_path)
 
         # Predict using selected model
         prediction = selected_model.predict(img_array)

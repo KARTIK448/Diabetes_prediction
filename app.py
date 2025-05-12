@@ -32,7 +32,7 @@ from dotenv import load_dotenv
 
 load_dotenv()  # Load environment variables from .env file if present
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'postgresql://postgres:root@localhost:5432/retinoscan_db')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 app.config['UPLOAD_FOLDER'] = 'uploads/'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 

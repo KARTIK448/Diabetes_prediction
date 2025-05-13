@@ -18,7 +18,32 @@ from PIL import Image
 import imghdr
 from flask_cors import CORS
 
+import gdown
+import os
+
 model_path = 'models'  # updated to models folder
+
+# Google Drive file IDs for the model files (replace with your actual file IDs)
+gdrive_file_ids = {
+    'vit_model.h5': '1IuXBRkdChnEaI1dEqUw4o3nH8nL7aTCW',
+    'cnn_model.h5': '1XozLzTjlJib93A4Ac_d1-dllV4mkejzs',
+    'resnet_model_improved.h5': '1VlWLnMgTO8-E2zsqzLHtmz34C0BiWah0'
+}
+
+def download_model_from_gdrive(filename):
+    if not os.path.exists(model_path):
+        os.makedirs(model_path)
+    file_path = os.path.join(model_path, filename)
+    if not os.path.exists(file_path):
+        print(f"Downloading {filename} from Google Drive...")
+        url = f"https://drive.google.com/uc?id={gdrive_file_ids[filename]}"
+        gdown.download(url, file_path, quiet=False)
+    else:
+        print(f"{filename} already exists locally.")
+
+# Download all models if not present
+for model_file in gdrive_file_ids.keys():
+    download_model_from_gdrive(model_file)
 
 class_names = ['No_DR', 'Mild', 'Moderate', 'Severe', 'Proliferate_DR']
 

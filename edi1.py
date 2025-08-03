@@ -370,6 +370,27 @@ def build_mobilevit_model():
     model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
     
     return model
+def build_vit_model():
+    # Use ViT-B16, pretrained on ImageNet21k, then fine-tuned on ImageNet2012
+    # Set image_size=224, include_top=False for custom head
+    base_model = vit.vit_b16(
+        image_size=224,
+        pretrained=True,
+        include_top=False,
+        pretrained_top=False
+    )
+    from tensorflow.keras.layers import GlobalAveragePooling2D, Dense, Dropout, BatchNormalization
+    from tensorflow.keras.models import Sequential
+    model = Sequential([
+        base_model,
+        GlobalAveragePooling2D(),
+        Dense(128, activation='relu'),
+        BatchNormalization(),
+        Dropout(0.3),
+        Dense(5, activation='softmax')
+    ])
+    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+    return model
 model_choice = "mobilevit"  # Change to 'resnet' or 'vit' if needed
 if model_choice == "resnet":
     model = build_resnet_model()

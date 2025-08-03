@@ -25,6 +25,6 @@ uploads/
 
 # Ignore processed_data.npz in root directory
 processed_data.npz
-
+models/
 
 .env

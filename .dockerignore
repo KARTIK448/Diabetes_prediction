@@ -1,0 +1,33 @@
+# Ignore Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore virtual environment folders
+venv/
+env/
+.venv/
+.env/
+
+# Ignore Jupyter notebook checkpoints
+.ipynb_checkpoints/
+
+# Ignore dataset and model files (optional, if you don't want to include large files in the image)
+Dataset2/
+models/
+
+# Ignore git files
+.git
+.gitignore
+
+# Ignore environment files
+.env
+
+# Ignore IDE/editor folders
+.vscode/
+.idea/
+
+# Ignore logs and temp files
+*.log
+*.tmp

@@ -1,0 +1,5 @@
+- [ ] Add Prescription model in app.py
+- [ ] Add route /add_prescription/<int:image_id> for doctors to add prescription
+- [ ] Update doctor_dashboard.html to include "Add Prescription" link in the table
+- [ ] Update patient_dashboard.html to show prescriptions in analysis history
+- [ ] Test the functionality by running the app

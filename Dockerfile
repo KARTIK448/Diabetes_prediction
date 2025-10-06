@@ -18,12 +18,15 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the entire project into the container
 COPY . .
 
+# Create uploads directory
+RUN mkdir -p uploads
+
 # Expose port 5000 for the Flask app
 EXPOSE 5000
 
 # Set environment variables
 ENV FLASK_ENV=production
 ENV PYTHONUNBUFFERED=1
-
+ENV DATABASE_URL=postgresql://postgres:root@localhost:5432/retinoscan_db
 # Run the app with gunicorn using eventlet worker
-CMD ["gunicorn", "-k", "eventlet", "-w", "1", "app:create_app()", "-b", "0.0.0.0:5000"]
+CMD ["gunicorn", "-k", "eventlet", "-w", "1", "app:app", "-b", "0.0.0.0:5000"]

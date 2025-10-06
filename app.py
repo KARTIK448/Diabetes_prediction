@@ -60,9 +60,19 @@ from dotenv import load_dotenv
 
 load_dotenv()  # Load environment variables from .env file if present
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+database_url = os.getenv('DATABASE_URL')
+if not database_url:
+    raise ValueError(
+        "DATABASE_URL environment variable is not set. "
+        "Please set it before running the application. "
+        "Example: export DATABASE_URL=postgresql://user:password@host:port/database"
+    )
+app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 app.config['UPLOAD_FOLDER'] = 'uploads/'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Ensure upload folder exists
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 # Models
 db = SQLAlchemy(app)
@@ -87,6 +97,7 @@ class ImageUpload(db.Model):
     image_data = db.Column(db.LargeBinary, nullable=False)  # Store image as BLOB
     result = db.Column(db.String(150), nullable=True)  # analysis result
     model_used = db.Column(db.String, nullable=True)  # model used for analysis
+    prescriptions = db.relationship('Prescription', backref='image_upload', lazy=True)
 
 
 from datetime import datetime
@@ -385,13 +396,13 @@ def get_room_id(doctor_id, patient_id):
     return f'chat_{ids[0]}_{ids[1]}'
 
 
+# Create tables in the database
+with app.app_context():
+    db.create_all()
+
 if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
     socketio.run(app, debug=True, use_reloader=False)
 
 # For Gunicorn compatibility
 def create_app():
-    with app.app_context():
-        db.create_all()
     return app

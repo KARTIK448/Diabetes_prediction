@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    image: kartik448/edi-app:1.0
+    ports:
+      - "5000:5000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:root@db:5432/retinoscan_db
+      - FLASK_ENV=production
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - uploads:/app/uploads
+    restart: unless-stopped
+    networks:
+      - my-network
+
+  db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=retinoscan_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d retinoscan_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - my-network  
+
+volumes:
+  postgres_data:
+  uploads:
+
+networks:
+  my-network:
+     driver: bridge

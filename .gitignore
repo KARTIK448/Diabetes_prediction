@@ -15,7 +15,7 @@ Dataset2/
 # Database files
 *.db
 instance/
-
+.idea
 # Uploads folder (user uploaded files)
 uploads/
 

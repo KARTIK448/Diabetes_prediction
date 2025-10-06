@@ -1,681 +1,328 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8" />
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-    <title>Doctor Dashboard - RetinovaCare AI</title>
-
+    <title>Manage Prescriptions - RetinovaCare AI</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
     <style>
-
         :root {
-
-            /* Color Palette - Matching Patient Dashboard */
-
-            --clr-primary: #4A90E2; /* A calming, professional blue */
-
+            --clr-primary: #4A90E2;
             --clr-primary-light: #EAF2FA;
-
-            --clr-accent: #50E3C2;  /* A fresh, modern teal/mint accent */
-
+            --clr-accent: #50E3C2;
             --clr-accent-dark: #38A89D;
-
-            --clr-bg: #F9FAFB;      /* Very light grey for overall background */
-
-            --clr-text-primary: #1F2937; /* Dark grey for primary text */
-
-            --clr-text-secondary: #4B5563; /* Medium grey for secondary text */
-
+            --clr-bg: #F9FAFB;
+            --clr-text-primary: #1F2937;
+            --clr-text-secondary: #4B5563;
             --clr-white: #FFFFFF;
-
-            --clr-border: #D1D5DB;   /* Softer border color */
-
+            --clr-border: #D1D5DB;
             --clr-card-bg: var(--clr-white);
-
-            --clr-danger: #EF4444; /* For destructive actions or warnings if needed */
-
+            --clr-danger: #EF4444;
 
             --radius-sm: 6px;
-
             --radius-md: 12px;
-
             --radius-lg: 24px;
 
-
             --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-
             --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
-
             --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
 
-
             --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-
         }
-
 
         * {
-
             box-sizing: border-box;
-
             margin: 0;
-
             padding: 0;
-
         }
-
-
-        html, body {
-
-            height: 100%;
-
-        }
-
 
         body {
-
             font-family: var(--font-primary);
-
             background: var(--clr-bg);
-
             color: var(--clr-text-primary);
-
             display: flex;
-
             flex-direction: column;
-
             min-height: 100vh;
-
-            line-height: 1.65; /* Improved readability */
-
+            line-height: 1.65;
         }
-
-
-        /* HEADER */
 
         header {
-
             background: linear-gradient(135deg, var(--clr-primary), var(--clr-accent));
-
             color: var(--clr-white);
-
             padding: 2.5rem 2rem;
-
             text-align: center;
-
             border-bottom-left-radius: var(--radius-md);
-
             border-bottom-right-radius: var(--radius-md);
-
             box-shadow: var(--shadow-md);
-
         }
 
-
-        header h2 {
-
+        header h1 {
             font-size: 2.5rem;
-
             font-weight: 700;
-
             margin-bottom: 0.5rem;
-
             letter-spacing: -0.5px;
-
         }
 
-
-        .button-group {
-
+        nav {
             margin-top: 2rem;
-
             display: flex;
-
             justify-content: center;
-
             gap: 1rem;
-
         }
 
-
-        .button-group a {
-
+        .nav-button {
             background: var(--clr-white);
-
             color: var(--clr-primary);
-
             padding: 0.75rem 1.75rem;
-
             font-weight: 600;
-
             border-radius: var(--radius-lg);
-
             text-decoration: none;
-
             box-shadow: var(--shadow-sm);
-
             transition: all 0.25s ease-out;
-
             border: 2px solid transparent;
-
         }
 
-
-        .button-group a:hover {
-
+        .nav-button:hover {
             background: var(--clr-primary-light);
-
             color: var(--clr-primary);
-
             transform: translateY(-2px);
-
             box-shadow: var(--shadow-md);
-
         }
-
-
-        /* MAIN CONTENT */
 
         main {
-
             flex: 1;
-
             padding: 2.5rem 1.5rem;
-
-            max-width: 1100px;
-
+            max-width: 900px;
             width: 95%;
-
             margin: 0 auto;
-
         }
-
 
         section {
-
             background: var(--clr-card-bg);
-
             border-radius: var(--radius-md);
-
             padding: 2rem 2.5rem;
-
             box-shadow: var(--shadow-md);
-
             margin-bottom: 3rem;
-
             border: 1px solid var(--clr-border);
-
         }
 
-
-        section h3 {
-
+        section h2 {
             font-size: 1.8rem;
-
             margin-bottom: 1.5rem;
-
             color: var(--clr-primary);
-
             font-weight: 600;
-
             padding-bottom: 0.75rem;
-
             border-bottom: 2px solid var(--clr-primary-light);
-
             display: inline-block;
-
         }
-
-
-        section h4 { /* Patient Name */
-
-            margin-top: 2rem;
-
-            font-size: 1.25rem;
-
-            color: var(--clr-text-primary);
-
-            font-weight: 600;
-
-            margin-bottom: 1rem;
-
-        }
-
-
-        section > p { /* "No uploads/patients found" */
-
-            color: var(--clr-text-secondary);
-
-            font-size: 1rem;
-
-            padding: 1rem 0;
-
-        }
-
-
-        /* TABLE STYLING */
 
         table {
-
             width: 100%;
-
             border-collapse: separate;
-
             border-spacing: 0;
-
             background: var(--clr-white);
-
             border-radius: var(--radius-sm);
-
             overflow: hidden;
-
             box-shadow: var(--shadow-sm);
-
             margin-top: 0.5rem;
-
             border: 1px solid var(--clr-border);
-
         }
-
 
         th, td {
-
             padding: 1rem 1.25rem;
-
             text-align: left;
-
             font-size: 0.98rem;
-
             border-bottom: 1px solid var(--clr-border);
-
         }
-
 
         th {
-
             background: var(--clr-primary-light);
-
             color: var(--clr-primary);
-
             font-weight: 600;
-
             text-transform: uppercase;
-
             letter-spacing: 0.5px;
-
             font-size: 0.9rem;
-
         }
-
 
         tr:last-child td {
-
             border-bottom: none;
-
         }
-
 
         tr:nth-child(even) {
-
-            background-color: rgba(234, 242, 250, 0.3); /* Very light tint of primary light */
-
+            background-color: rgba(234, 242, 250, 0.3);
         }
-
 
         tr:hover {
-
             background-color: var(--clr-primary-light);
-
         }
-
 
         td {
-
             color: var(--clr-text-secondary);
-
         }
 
-
-        td:first-child { /* Filename */
-
+        td:first-child {
             color: var(--clr-text-primary);
-
             font-weight: 500;
-
         }
 
-
-        a.view-link {
-
-            color: var(--clr-primary);
-
-            font-weight: 600;
-
-            text-decoration: none;
-
-            padding: 0.3rem 0.5rem;
-
-            border-radius: var(--radius-sm);
-
-            transition: background-color 0.2s ease, color 0.2s ease;
-
+        form {
+            margin: 0;
         }
 
-
-        a.view-link:hover {
-
-            background-color: var(--clr-primary-light);
-
-            text-decoration: none;
-
-        }
-
-
-        .chat-link {
-
-            background: var(--clr-accent);
-
+        button.delete-btn {
+            background-color: var(--clr-danger);
             color: var(--clr-white);
-
-            padding: 0.5rem 1rem;
-
+            border: none;
+            padding: 0.4rem 0.8rem;
             border-radius: var(--radius-sm);
-
             font-weight: 600;
-
-            text-decoration: none;
-
-            transition: all 0.2s ease-out;
-
-            display: inline-block;
-
+            cursor: pointer;
+            transition: background-color 0.2s ease;
         }
 
-
-        .chat-link:hover {
-
-            background: var(--clr-accent-dark);
-
-            transform: scale(1.03);
-
+        button.delete-btn:hover {
+            background-color: #c53030;
         }
-
-
-        /* FOOTER */
 
         footer {
-
             background: var(--clr-text-primary);
-
             color: #A0AEC0;
-
             padding: 3rem 2rem;
-
             text-align: center;
-
             border-top-left-radius: var(--radius-md);
-
             border-top-right-radius: var(--radius-md);
-
             margin-top: auto;
-
         }
-
 
         footer h3 {
-
             color: var(--clr-white);
-
             font-size: 1.5rem;
-
             font-weight: 600;
-
             margin-bottom: 1rem;
-
         }
-
 
         footer p, footer a {
-
             font-size: 0.95rem;
-
             color: #CBD5E0;
-
             text-decoration: none;
-
         }
-
 
         footer a:hover {
-
             color: var(--clr-white);
-
             text-decoration: underline;
-
         }
-
 
         footer .footer-links {
-
             margin: 1.5rem 0;
-
             display: flex;
-
             justify-content: center;
-
             gap: 2.5rem;
-
             flex-wrap: wrap;
-
         }
-
 
         footer .footer-bottom {
-
             margin-top: 1.5rem;
-
             font-size: 0.85rem;
-
             opacity: 0.8;
-
         }
-
-
-        /* RESPONSIVE ADJUSTMENTS */
 
         @media (max-width: 768px) {
-
-            header h2 {
-
+            header h1 {
                 font-size: 2rem;
-
             }
-
             main {
-
                 padding: 2rem 1rem;
-
             }
-
             section {
-
                 padding: 1.5rem;
-
             }
-
-            section h3 {
-
+            section h2 {
                 font-size: 1.6rem;
-
             }
-
             th, td {
-
                 font-size: 0.9rem;
-
                 padding: 0.75rem 0.75rem;
-
             }
-
-            .chat-link {
-
-                padding: 0.4rem 0.8rem;
-
+            button.delete-btn {
+                padding: 0.3rem 0.6rem;
             }
-
         }
-
 
         @media (max-width: 500px) {
-
             header {
-
                 padding: 2rem 1.5rem;
-
             }
-
-            header h2 {
-
+            header h1 {
                 font-size: 1.8rem;
-
             }
-
-            .button-group {
-
+            nav {
                 flex-direction: column;
-
+                gap: 0.8rem;
             }
-
-            .button-group a {
-
+            .nav-button {
                 width: 100%;
-
                 padding: 0.8rem 1.5rem;
-
             }
-
         }
-
     </style>
-
 </head>
-
 <body>
-
     <header>
-
-        <h2>Doctor Dashboard - RetinovaCare AI</h2>
-
-        <div class="button-group">
-
-            <a href="{{ url_for('doctor_prescriptions') }}">Manage Prescriptions</a>
-
-            <a href="{{ url_for('logout') }}">Logout</a>
-
-        </div>
-
+        <h1>Manage Prescriptions - RetinovaCare AI</h1>
+        <nav>
+            <a class="nav-button" href="{{ url_for('doctor_prescriptions') }}">Manage Prescriptions</a>
+            <a class="nav-button" href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a class="nav-button" href="{{ url_for('logout') }}">Logout</a>
+        </nav>
     </header>
-
-
     <main>
-
         <section>
-
-            <h3>👁 Patient Image Analysis</h3>
-
-            {% if patients and patients|length > 0 %}
-
-                {% for patient in patients %}
-
-                    <h4>Patient: {{ patient.username }}</h4>
-
-                    {% set uploads = patient.uploads %}
-
-                    {% if uploads and uploads|length > 0 %}
-
-                        <table>
-
-                            <thead>
-
-                                <tr>
-                                    <th>Image Filename</th>
-                                    <th>Analysis Result</th>
-                                    <th>Model Used</th>
-                                    <th>View</th>
-                                    <th>Prescription</th>
-                                    <th>Chat</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for upload in uploads %}
-                                    <tr>
-                                        <td>{{ upload.filename }}</td>
-                                        <td>{{ upload.result }}</td>
-                                        <td>{{ model_label_map.get(upload.model_used, upload.model_used) }}</td>
-                                        <td><a class="view-link" href="{{ url_for('view_image', image_id=upload.id) }}" target="_blank">View</a></td>
-                                        <td><a class="chat-link" href="{{ url_for('add_prescription', image_id=upload.id) }}">Add Prescription</a></td>
-                                        <td><a class="chat-link" href="{{ url_for('chat', patient_id=patient.id, doctor_id=current_user.id) }}">Chat</a></td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-
-                        </table>
-
-                    {% else %}
-
-                        <p>No uploads yet for this patient.</p>
-
-                    {% endif %}
-
-                {% endfor %}
-
+            <h2>Your Prescriptions</h2>
+            {% if prescriptions and prescriptions|length > 0 %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Image Filename</th>
+                            <th>Patient Username</th>
+                            <th>Prescription Text</th>
+                            <th>Date Created</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for prescription in prescriptions %}
+                        <tr>
+                            <td>{{ prescription.image_upload.filename }}</td>
+                            <td>{{ prescription.image_upload.patient.username }}</td>
+                            <td>{{ prescription.prescription_text }}</td>
+                            <td>{{ prescription.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                            <td>
+                                <form method="POST" action="{{ url_for('delete_prescription', prescription_id=prescription.id) }}" onsubmit="return confirm('Are you sure you want to delete this prescription?');">
+                                    <button type="submit" class="delete-btn">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             {% else %}
-
-                <p>No patients found.</p>
-
+                <p>No prescriptions found.</p>
             {% endif %}
-
         </section>
-
     </main>
-
-
     <footer>
-
         <h3>About RetinovaCare AI</h3>
-
         <p>We provide early detection of diabetic retinopathy using AI-powered image analysis and real-time doctor consultation.</p>
-
-
         <div class="footer-links">
-
+            <a href="{{ url_for('doctor_prescriptions') }}">Manage Prescriptions</a>
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
             <a href="{{ url_for('logout') }}">Logout</a>
-
-            <a href="#">Privacy Policy</a>
-
-            <a href="#">Contact Support</a>
-
         </div>
-
-
         <div class="footer-bottom">
-
             &copy; 2025 RetinovaCare AI. All rights reserved.
-
         </div>
-
     </footer>
-
 </body>
-
 </html>

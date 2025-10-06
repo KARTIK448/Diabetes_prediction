@@ -11,7 +11,7 @@ import os
 import secrets
 import hashlib
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, FileField, SelectField
+from wtforms import StringField, PasswordField, SubmitField, FileField, SelectField, TextAreaField
 from wtforms.validators import DataRequired, Length
 from flask_wtf.file import FileAllowed
 from io import BytesIO
@@ -106,6 +106,13 @@ import tzlocal
 
 LOCAL_TIMEZONE = tzlocal.get_localzone()  # Automatically detect local timezone
 
+class Prescription(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    image_upload_id = db.Column(db.Integer, db.ForeignKey('image_upload.id'), nullable=False)
+    doctor_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    prescription_text = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    doctor = db.relationship('User', foreign_keys=[doctor_id])
 
 class ChatMessage(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -178,6 +185,11 @@ class UploadForm(FlaskForm):
     submit = SubmitField('Upload')
 
 
+class PrescriptionForm(FlaskForm):
+    prescription_text = TextAreaField('Prescription', validators=[DataRequired()])
+    submit = SubmitField('Add Prescription')
+
+
 # Register route
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -237,6 +249,9 @@ def dashboard():
     if current_user.role == 'patient':
         uploads = ImageUpload.query.filter_by(user_id=current_user.id).all()
         doctors = User.query.filter_by(role='doctor').all()
+        # Load prescriptions for each upload
+        for upload in uploads:
+            upload.prescriptions = Prescription.query.filter_by(image_upload_id=upload.id).all()
         return render_template('patient_dashboard.html', uploads=uploads, doctors=doctors,
                                model_label_map=model_label_map)
     else:
@@ -303,6 +318,38 @@ def view_image(image_id):
     return send_file(BytesIO(img_bytes), download_name=image.filename, mimetype=mime_type)
 
 
+# Route to add prescription
+
+@app.route('/add_prescription/<int:image_id>', methods=['GET', 'POST'])
+@login_required
+def add_prescription(image_id):
+    if current_user.role != 'doctor':
+        flash('Only doctors can add prescriptions.', 'danger')
+        return redirect(url_for('dashboard'))
+    image = ImageUpload.query.get_or_404(image_id)
+    form = PrescriptionForm()
+    if form.validate_on_submit():
+        new_prescription = Prescription(image_upload_id=image_id, doctor_id=current_user.id, prescription_text=form.prescription_text.data)
+        db.session.add(new_prescription)
+        db.session.commit()
+        flash('Prescription added successfully.', 'success')
+        return redirect(url_for('dashboard'))
+    return render_template('add_prescription.html', form=form, image=image)
+
+
+# Route to view prescriptions
+
+@app.route('/view_prescription/<int:image_id>')
+@login_required
+def view_prescription(image_id):
+    image = ImageUpload.query.get_or_404(image_id)
+    if current_user.role == 'patient' and image.user_id != current_user.id:
+        flash('Unauthorized access.', 'danger')
+        return redirect(url_for('dashboard'))
+    prescriptions = Prescription.query.filter_by(image_upload_id=image_id).all()
+    return render_template('view_prescription.html', image=image, prescriptions=prescriptions)
+
+
 @app.route('/patient/<int:patient_id>')
 @login_required
 def patient_profile(patient_id):
@@ -312,6 +359,32 @@ def patient_profile(patient_id):
     patient = User.query.get_or_404(patient_id)
     uploads = ImageUpload.query.filter_by(user_id=patient.id).all()
     return render_template('patient_profile.html', patient=patient, uploads=uploads)
+
+
+@app.route('/doctor_prescriptions')
+@login_required
+def doctor_prescriptions():
+    if current_user.role != 'doctor':
+        flash('Unauthorized access.', 'danger')
+        return redirect(url_for('dashboard'))
+    prescriptions = Prescription.query.filter_by(doctor_id=current_user.id).order_by(Prescription.created_at.desc()).all()
+    return render_template('manage_prescriptions.html', prescriptions=prescriptions)
+
+
+@app.route('/delete_prescription/<int:prescription_id>', methods=['POST'])
+@login_required
+def delete_prescription(prescription_id):
+    if current_user.role != 'doctor':
+        flash('Unauthorized access.', 'danger')
+        return redirect(url_for('dashboard'))
+    prescription = Prescription.query.get_or_404(prescription_id)
+    if prescription.doctor_id != current_user.id:
+        flash('You can only delete your own prescriptions.', 'danger')
+        return redirect(url_for('doctor_prescriptions'))
+    db.session.delete(prescription)
+    db.session.commit()
+    flash('Prescription deleted successfully.', 'success')
+    return redirect(url_for('doctor_prescriptions'))
 
 
 @app.route('/chat/<int:patient_id>/<int:doctor_id>')

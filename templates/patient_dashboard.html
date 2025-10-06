@@ -308,6 +308,7 @@
                         <a href="{{ url_for('view_image', image_id=upload.id) }}">{{ upload.filename }}</a>
                         <div class="result">Result: {{ upload.result }}</div>
                         <div class="result">Model Used: {{ model_label_map.get(upload.model_used, upload.model_used) }}</div>
+                        <a class="chat-button" href="{{ url_for('view_prescription', image_id=upload.id) }}">View Prescription</a>
                     </div>
                 {% else %}
                     <p>No uploads yet. Start by uploading your first image.</p>
